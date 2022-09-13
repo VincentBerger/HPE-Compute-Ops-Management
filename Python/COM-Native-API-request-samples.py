@@ -409,7 +409,7 @@ bundleid = [fb for fb in bundles['items'] if fb['releaseVersion'] == '2022.03.0'
 DL360Gen10Plus_group = [group for group in groups['items'] if group['name'] == 'DL360Gen10plus-Production-Group']
 deviceids = []
 for server in DL360Gen10Plus:
-   deviceids.append({'serverId': server['id']})
+   deviceids.append(server['id'])
 
 
 body = {
@@ -430,8 +430,8 @@ body = {
                         "jobTemplateUri": "/api/compute/v1/job-templates/" + jobTemplateid,
                         "data": {
                           "devices": deviceids,
-                          "parallel": "true",
-                          "stopOnFailure": "false"
+                          "parallel": True,
+                          "stopOnFailure": False
                         }
                       }                              
                   }
