@@ -118,7 +118,7 @@ print(f"Group '{GroupName}' modification to use SPP '{Baseline}' - Status: {resp
 ## Note: To perform an immediate update, you must create a job instead of a schedule
 schedulename = "Firmware upgrade for group DL360Gen10plus-Production-Group"
 description = "Upgrade to SPP 2022.03.0"
-interval = "null" # Can be P7D for 7 days intervals, P15m, P1M, P1Y
+interval = None # Can be P7D for 7 days intervals, P15m, P1M, P1Y
 
 jobtemplates = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/job-templates', headers=headers).json() 
 jobTemplateid = [jt for jt in jobtemplates['items'] if jt['name'] == 'GroupFirmwareUpdate']['id']
@@ -152,8 +152,8 @@ body = {
                         "jobTemplateUri": "/api/compute/v1/job-templates/" + jobTemplateid,
                         "data": {
                           "devices": deviceids,
-                          "parallel": "true",
-                          "stopOnFailure": "false"
+                          "parallel": True,
+                          "stopOnFailure": False
                         }
                       }                              
                   }

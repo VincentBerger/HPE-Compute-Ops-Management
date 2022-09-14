@@ -247,7 +247,8 @@ if response.status_code < 300 :
    # Add all DL360 Gen10 Plus to newly created group
    devices = []
    for server in DL360Gen10Plus:
-      devices.append({'serverId': server['id']})
+      #devices.append({'serverId': server['id']})
+      devices.append(server['id'])
    
    body = {
       "devices":  devices
@@ -311,7 +312,8 @@ firmwarebundleid = [fb for fb in bundles['items'] if fb['releaseVersion'] == '20
 DL360Gen10Plus_group = [group for group in groups['items'] if group['name'] == 'DL360Gen10plus-Production-Group'][0]
 deviceids = []
 for server in DL360Gen10Plus:
-   deviceids.append({'serverId': server['id']})
+   #deviceids.append({'serverId': server['id']})
+   deviceids.append(server['id'])
 
 body = {
     "jobTemplateUri": jobtemplateUri,
