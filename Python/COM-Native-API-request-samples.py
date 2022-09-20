@@ -217,7 +217,7 @@ print(group)
 
 
 # Delete a group
-response = requests.delete(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/groups/' + groupid, headers=headers) 
+#response = requests.delete(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/groups/' + groupid, headers=headers) 
 print(response.json())
 
 
@@ -247,8 +247,7 @@ if response.status_code < 300 :
    # Add all DL360 Gen10 Plus to newly created group
    devices = []
    for server in DL360Gen10Plus:
-      #devices.append({'serverId': server['id']})
-      devices.append(server['id'])
+      devices.append({'serverId': server['id']})
    
    body = {
       "devices":  devices
