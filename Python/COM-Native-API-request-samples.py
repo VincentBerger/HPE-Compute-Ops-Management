@@ -80,7 +80,7 @@ headers = {"Authorization": "Bearer " + AccessToken}
 
 
 # Obtain the list of servers in your account
-response = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/servers', headers=headers) 
+response = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/servers', headers=headers) 
 ServersList = response.json()
 
 print(f"{ServersList['count']} server(s) found")
@@ -137,51 +137,51 @@ if ServersList['count'] > 0 :
    print(ServersList['items'][0]['host'])
 
 # Obtain the first 10 servers
-response = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/servers?limit=10', headers=headers)
+response = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/servers?limit=10', headers=headers)
 ServersList = response.json()
 
 
 # List of servers from the 10th
-response = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/servers?offset=9', headers=headers)
+response = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/servers?offset=9', headers=headers)
 ServersList = response.json()
 
 # Get a server by ID
 serverId = [server for server in ServersList['items'] if server['name'] == 'HPE-HOL33'][0]['id']
-response = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/servers/' + serverId, headers=headers)
+response = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/servers/' + serverId, headers=headers)
 server = response.json()
 print(json.dumps(server,indent=2))
 
 # List all alerts for a server
-response = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/servers/' + serverId + '/alerts', headers=headers)
+response = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/servers/' + serverId + '/alerts', headers=headers)
 alerts = response.json()
 print(json.dumps(alerts['items'],indent=2))
 
 # List all DL360 Gen10+ servers
-response = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/servers', headers=headers) 
+response = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/servers', headers=headers) 
 DL360Gen10Plus = [server for server in response.json()['items'] if server['hardware']['model'] == 'ProLiant DL360 Gen10 Plus']
 print(DL360Gen10Plus)
 
 #-------------------------------------------------------ACTIVITIES requests samples--------------------------------------------------------------------------------
 
 # List all activities
-response = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/activities', headers=headers) 
+response = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/activities', headers=headers) 
 activities = response.json()
 print(activities['items'])
 
 # List last 10 server activities
-response = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + "/activities?filter=source/type eq 'Server'&limit=10", headers=headers) 
+response = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + "/activities?filter=source/type eq 'Server'&limit=10", headers=headers) 
 activities = response.json()
 print(activities['items'])
 print(activities['count'])
 
 # List last 10 firmware activities
-response = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + "/activities?filter=source/type eq 'Firmware'&limit=10", headers=headers) 
+response = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + "/activities?filter=source/type eq 'Firmware'&limit=10", headers=headers) 
 firmware_activities = response.json()
 print(firmware_activities['items'])
 print(firmware_activities['count'])
 
 # List required subscriptions activities
-response = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + "/activities?filter=source/type eq 'Server' and contains(key,'SERVER_ASSIGNED')", headers=headers) 
+response = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + "/activities?filter=source/type eq 'Server' and contains(key,'SERVER_ASSIGNED')", headers=headers) 
 subscription_activities = response.json()
 print(subscription_activities['items'])
 print(subscription_activities['count'])
@@ -190,13 +190,13 @@ print(subscription_activities['count'])
 
 
 # List all firmware bundles
-response = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/firmware-bundles', headers=headers) 
+response = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/firmware-bundles', headers=headers) 
 firmware_bundles = response.json()
 print(firmware_bundles['items'])
 
 # List a specific firmware bundle
 firmwarebundleid = [fb for fb in firmware_bundles['items'] if fb['releaseVersion'] == '2022.03.0'][0]['id']
-response = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/firmware-bundles/' + firmwarebundleid, headers=headers) 
+response = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/firmware-bundles/' + firmwarebundleid, headers=headers) 
 firmware_bundle = response.json()
 print(firmware_bundle)
 
@@ -204,20 +204,20 @@ print(firmware_bundle)
 #-------------------------------------------------------GROUPS requests samples--------------------------------------------------------------------------------
 
 # List all groups
-response = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/groups', headers=headers) 
+response = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/groups', headers=headers) 
 groups = response.json()
 print(groups['items'])
 
 
 # List a group
-groupid = [group for group in groups['items'] if group['name'] == 'Production'][0]['id']
-response = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/groups/' + groupid, headers=headers) 
+groupid = [group for group in groups['items'] if group['name'] == 'Production']['id']
+response = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/groups/' + groupid, headers=headers) 
 group = response.json()
 print(group)
 
 
 # Delete a group
-#response = requests.delete(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/groups/' + groupid, headers=headers) 
+#response = requests.delete(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/groups/' + groupid, headers=headers) 
 print(response.json())
 
 
@@ -239,7 +239,7 @@ body = {
   }
 
 headers['Content-Type'] = "application/json"
-response = requests.post(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/groups', headers=headers, data=json.dumps(body)) 
+#response = requests.post(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/groups', headers=headers, body=body) 
 print (response.json())
 if response.status_code < 300 :
    newcreategroupid = response.json()['id']
@@ -253,8 +253,12 @@ if response.status_code < 300 :
       "devices":  devices
    }
 
-   response = requests.post(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/groups/' + newcreategroupid + "/devices", headers=headers, data=json.dumps(body))
-   print (response.json())
+body = {
+    "devices":  devices
+  }
+
+response = requests.post(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/groups/' + newcreategroupid + "/devices", headers=headers, body=body)
+print (response.json())
 
    # Modify a group
    newgroupname = "DL360Gen10plus-Production-Group"
@@ -263,23 +267,23 @@ if response.status_code < 300 :
       "name":  newgroupname
    }
 
-   headers['Content-Type'] = "application/merge-patch+json"
-   response = requests.patch(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/groups/' + newcreategroupid, headers=headers, data=json.dumps(body))
-   print (response.json())
-   headers.pop("Content-Type")
+headers['Content-Type'] = "application/merge-patch+json"
+response = requests.patch(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/groups/' + newcreategroupid, headers=headers, body=body)
+print (response.json())
+headers.pop("Content-Type")
 
 #-------------------------------------------------------JOB-TEMPLATES requests samples--------------------------------------------------------------------------------
 
 
 # List all job templates
-response = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/job-templates', headers=headers) 
+response = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/job-templates', headers=headers) 
 jobtemplates = response.json()
 print(json.dumps(jobtemplates['items'], indent=2))
 
 
 # Get a  job template
-jobtemplateid = [jt for jt in jobtemplates['items'] if jt['name'] == 'GroupFirmwareUpdate'][0]['id']
-response = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/job-templates/' + jobtemplateid, headers=headers) 
+jobtemplateid = [jt for jt in jobtemplates['items'] if jt['name'] == 'GroupFirmwareUpdate']['id']
+response = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/job-templates/' + jobtemplateid, headers=headers) 
 jobtemplate = response.json()
 print(json.dumps(jobtemplate,indent=2))
 
@@ -287,14 +291,14 @@ print(json.dumps(jobtemplate,indent=2))
 #-------------------------------------------------------JOBS requests samples--------------------------------------------------------------------------------
 
 # List all jobs
-response = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/jobs', headers=headers) 
+response = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/jobs', headers=headers) 
 jobs = response.json()
 print(json.dumps(jobs['items'], indent=2))
 
 
 # Get a job
 jobid = jobs['items'][0]['id']
-response = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/jobs/' + jobid, headers=headers) 
+response = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/jobs/' + jobid, headers=headers) 
 job = response.json()
 print(json.dumps(job, indent=2))
 
@@ -302,11 +306,11 @@ print(json.dumps(job, indent=2))
 ## This job will update all servers in the group "DL360Gen10plus-Production-Group" with SPP 2022.03.0
 ## Warning: Any updates other than iLO FW require a server reboot!
 ## Note: To set schedule options during updates, you must create a schedule instead of a job
-jobtemplates = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/job-templates', headers=headers).json() 
-jobtemplateUri = [jt for jt in jobtemplates['items'] if jt['name'] == 'GroupFirmwareUpdate'][0]['resourceUri']
-groups = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/groups', headers=headers).json()
-groupUri = [group for group in groups['items'] if group['name'] == 'DL360Gen10plus-Production-Group'][0]['resourceUri']
-bundles = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/firmware-bundles', headers=headers).json()
+jobtemplates = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/job-templates', headers=headers).json() 
+jobtemplateUri = [jt for jt in jobtemplates['items'] if jt['name'] == 'GroupFirmwareUpdate']['resourceUri']
+groups = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/groups', headers=headers).json()
+groupUri = [group for group in groups['items'] if group['name'] == 'DL360Gen10plus-Production-Group']['resourceUri']
+bundles = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/firmware-bundles', headers=headers).json()
 firmwarebundleid = [fb for fb in bundles['items'] if fb['releaseVersion'] == '2022.03.0'][0]['id']
 DL360Gen10Plus_group = [group for group in groups['items'] if group['name'] == 'DL360Gen10plus-Production-Group'][0]
 deviceids = []
@@ -325,7 +329,7 @@ body = {
   }
 
 headers["Content-Type"] = "application/json"
-response = requests.post(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/jobs', headers=headers, data=json.dumps(body)) 
+response = requests.post(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/jobs', headers=headers, body=body) 
 jobUri = response.json()['resourceUri']
 
 ## Wait for the task to start or fail
@@ -352,7 +356,7 @@ else :
 
 # Get the update report for the servers in the group after the update is complete.
 for deviceid in deviceids:
-   report = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/servers/' + deviceid['serverId'], headers=headers).json()['lastFirmwareUpdate']
+   report = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/servers/' + deviceid, headers=headers)['content']['lastFirmwareUpdate']
    print(report)
 
 
@@ -360,7 +364,7 @@ for deviceid in deviceids:
 
 
 # List all schedules
-response = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/schedules', headers=headers) 
+response = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/schedules', headers=headers) 
 schedules = response.json()
 print(schedules['items'])
 
@@ -371,8 +375,11 @@ if schedules['count'] > 0 :
    schedule = response.json()
    print(schedule)
 
-   # Delete a schedule
-   #response = requests.delete(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/schedules/' + scheduleid, headers=headers) 
+# Get a schedule
+scheduleid = schedules['items'][0]['id']
+response = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/schedules/' + scheduleid, headers=headers) 
+schedule = response.json()
+print(schedule)
 
    # Update a schedule
    newname = "Firmware update for group Production"
@@ -380,16 +387,26 @@ if schedules['count'] > 0 :
    groups = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/groups', headers=headers).json()
    associatedResourceUri = [group for group in groups['items'] if group['name'] == 'Production'][0]['resourceUri']
 
-   body = {
-      "name":  newname,
-      "description":  description,
-      "associatedResourceUri":  associatedResourceUri,
-      "purpose": "GROUP_FW_UPDATE"
-   }
+# Delete a schedule
+response = requests.delete(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/schedules/' + scheduleid, headers=headers) 
 
-   headers["Content-Type"] = "application/merge-patch+json"
-   response = requests.patch(url=ConnectivityEndpoint + "/compute-ops/" + APIversion + "/schedules/" + scheduleid,headers=headers, data=json.dumps(body))
-   print(response.json())
+
+# Update a schedule
+newname = "Firmware update for group Production"
+description = "This upgrade is going to rock!"
+groups = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/groups', headers=headers).json()
+associatedResourceUri = [group for group in groups['items'] if group['name'] == 'Production']['resourceUri']
+
+body = {
+    "name":  newname,
+    "description":  description,
+    "associatedResourceUri":  associatedResourceUri,
+    "purpose": "GROUP_FW_UPDATE"
+}
+
+headers["Content-Type"] = "application/merge-patch+json"
+response = requests.patch(url=ConnectivityEndpoint + "/compute-ops-mgmt/" + APIversion + "/schedules/" + scheduleid,headers=headers, body=body)
+print(response.json())
 
 
 # Create a schedule
@@ -401,11 +418,11 @@ description = "Upgrade to SPP 2022.03.0"
 startAt = "2022-10-01T02:00:00"
 interval = "P1M" # Can be P7D for 7 days intervals, P15m, P1M, P1Y
 
-jobtemplates = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/job-templates', headers=headers).json() 
-jobTemplateid = [jt for jt in jobtemplates['items'] if jt['name'] == 'GroupFirmwareUpdate'][0]['id']
-groups = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/groups', headers=headers).json()
-groupid = [group for group in groups['items'] if group['name'] == 'DL360Gen10plus-Production-Group'][0]['id']
-bundles = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/firmware-bundles', headers=headers).json()
+jobtemplates = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/job-templates', headers=headers).json() 
+jobTemplateid = [jt for jt in jobtemplates['items'] if jt['name'] == 'GroupFirmwareUpdate']['id']
+groups = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/groups', headers=headers).json()
+groupid = [group for group in groups['items'] if group['name'] == 'DL360Gen10plus-Production-Group']['id']
+bundles = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/firmware-bundles', headers=headers).json()
 bundleid = [fb for fb in bundles['items'] if fb['releaseVersion'] == '2022.03.0'][0]['id']
 DL360Gen10Plus_group = [group for group in groups['items'] if group['name'] == 'DL360Gen10plus-Production-Group']
 deviceids = []
@@ -439,18 +456,17 @@ body = {
 }
 
 headers["Content-Type"] = "application/json"
-response = requests.post(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/schedules', headers=headers, data=json.dumps(body))
-if response.status_code < 300 :
-   scheduleid = response.json()['id']
+response = requests.post(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/schedules', headers=headers, body=body) 
+scheduleid = response.json()['id']
 
-   # Get details about newly created schedule
-   print(requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/schedules/' + scheduleid, headers=headers).json())
-   print(requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/schedules/' + scheduleid, headers=headers).json()['operation']['body']['data'])
+# Get details about newly created schedule
+print(requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/schedules/' + scheduleid, headers=headers).json())
+print(requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/schedules/' + scheduleid, headers=headers).json()['operation']['body']['data'])
 
-   # Delete newly created schedule
-   #response = requests.delete(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/schedules/' + scheduleid, headers=headers)
+# Delete newly created schedule
+response = requests.delete(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/schedules/' + scheduleid, headers=headers)
 
 # Get the update report for the servers in the group after the update is complete.
 for deviceid in deviceids:
-   report = requests.get(url=ConnectivityEndpoint + '/compute-ops/' + APIversion + '/servers/' + deviceid['serverId'], headers=headers).json()['lastFirmwareUpdate']
+   report = requests.get(url=ConnectivityEndpoint + '/compute-ops-mgmt/' + APIversion + '/servers/' + serverId, headers=headers)['content']['lastFirmwareUpdate']
    print(report)
